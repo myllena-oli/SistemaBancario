@@ -33,8 +33,53 @@ Para usar o sistema, siga as instruções apresentadas no menu principal:
 
 Certifique-se de que o PostgreSQL esteja em execução e que o banco de dados esteja configurado corretamente antes de usar o sistema.
 
+## Código de exemplo para criação das tabelas
+
+
+CREATE TABLE Cliente (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255),
+    cpf VARCHAR(11),
+    endereco VARCHAR(255)
+);
+
+CREATE TABLE ContaBancaria (
+    id SERIAL PRIMARY KEY,
+    numero_conta VARCHAR(20) UNIQUE,
+    saldo DECIMAL(10, 2),
+    cliente_id INT REFERENCES Cliente(id)
+);
+
+CREATE TABLE Transacao (
+    id SERIAL PRIMARY KEY,
+    data TIMESTAMP,
+    valor DECIMAL(10, 2),
+    conta_origem_id INT REFERENCES ContaBancaria(id),
+    conta_destino_id INT REFERENCES ContaBancaria(id)
+);
+
+- Inserir clientes
+  
+INSERT INTO Cliente (nome, cpf, endereco) VALUES
+    ('Cliente 1', '12345678901', 'Endereço 1'),
+    ('Cliente 2', '23456789012', 'Endereço 2');
+
+- Inserir contas bancárias
+  
+INSERT INTO ContaBancaria (numero_conta, saldo, cliente_id) VALUES
+    ('1001', 1000.00, 1),
+    ('1002', 2000.00, 2);
+
+- Inserir transações
+  
+INSERT INTO Transacao (data, valor, conta_origem_id, conta_destino_id) VALUES
+    (NOW(), 500.00, 1, 2),
+    (NOW(), 300.00, 2, 1);
+
+
 ## Observações
 
 Este é um sistema bancário simples, e não leva em consideração todos os aspectos de segurança e validações necessárias para um sistema real. É recomendável que você adicione mais validações e aprimore a segurança ao usar esse código em um ambiente de produção. Se sinta livre para implementar outras operações CRUD conforme necessário.
 
 Aproveite o uso do Sistema Bancário!
+
